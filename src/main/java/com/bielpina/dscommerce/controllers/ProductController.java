@@ -2,7 +2,7 @@ package com.bielpina.dscommerce.controllers;
 
 import com.bielpina.dscommerce.dto.ProductDTO;
 import com.bielpina.dscommerce.services.ProductService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,8 +27,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
-        Page<ProductDTO> dto = service.findAll(pageable);
+    public ResponseEntity<Page<ProductDTO>> findAll(
+            @RequestParam(name = "name", defaultValue = "") String name,
+            Pageable pageable) {
+        Page<ProductDTO> dto = service.findAll(name, pageable);
         return ResponseEntity.ok(dto);
     }
 
