@@ -1,7 +1,9 @@
 package com.bielpina.dscommerce.services;
 
+import com.bielpina.dscommerce.dto.CategoryDTO;
 import com.bielpina.dscommerce.dto.ProductDTO;
 import com.bielpina.dscommerce.dto.ProductMinDTO;
+import com.bielpina.dscommerce.entities.Category;
 import com.bielpina.dscommerce.entities.Product;
 import com.bielpina.dscommerce.repositories.ProductRepository;
 import com.bielpina.dscommerce.services.exceptions.DatabaseException;
@@ -74,6 +76,13 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()) {
+            Category cat = new Category();
+            cat.setId(catDto.getId());
+            entity.getCategories().add(cat);
+        }
     }
 
 
