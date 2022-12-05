@@ -1,7 +1,10 @@
 package com.bielpina.dscommerce.controllers;
 
+import com.bielpina.dscommerce.dto.OrderDTO;
 import com.bielpina.dscommerce.dto.ProductDTO;
 import com.bielpina.dscommerce.dto.ProductMinDTO;
+import com.bielpina.dscommerce.entities.Order;
+import com.bielpina.dscommerce.services.OrderService;
 import com.bielpina.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,43 +18,26 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/products")
+@RequestMapping(value = "/orders")
 public class OrderController {
 
     @Autowired
-    private ProductService service;
+    private OrderService service;
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        ProductDTO dto = service.findById(id);
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<ProductMinDTO>> findAll(
-            @RequestParam(name = "name", defaultValue = "") String name,
-            Pageable pageable) {
-        Page<ProductMinDTO> dto = service.findAll(name, pageable);
-        return ResponseEntity.ok(dto);
-    }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<OrderDTO> findById(@PathVariable Long id) {
+        OrderDTO dto = service.findById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
+    public ResponseEntity<OrderDTO> insert(@Valid @RequestBody OrderDTO dto) {
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping (value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
-        dto = service.update(id, dto);
-        return ResponseEntity.ok(dto);
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping (value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }
