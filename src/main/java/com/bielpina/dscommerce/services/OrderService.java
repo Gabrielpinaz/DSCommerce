@@ -2,7 +2,6 @@ package com.bielpina.dscommerce.services;
 
 import com.bielpina.dscommerce.dto.OrderDTO;
 import com.bielpina.dscommerce.dto.OrderItemDTO;
-import com.bielpina.dscommerce.dto.ProductDTO;
 import com.bielpina.dscommerce.entities.*;
 import com.bielpina.dscommerce.repositories.OrderItemRepository;
 import com.bielpina.dscommerce.repositories.OrderRepository;
